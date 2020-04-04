@@ -17,43 +17,39 @@ function loadSpreadsheet() {
     });
 }
 
+
 function drawDiagram(spreadsheetData) {
   // Load the Visualization API and the corechart package.
-  google.charts.load("current", { packages: ["corechart"] });
+    google.charts.load('current', {'packages':['annotatedtimeline']});
+    google.charts.setOnLoadCallback(drawChart);
 
   // Set a callback to run when the Google Visualization API is loaded.
-  google.charts.setOnLoadCallback(drawChart);
 
-  // Callback that creates and populates a data table,
-  // instantiates the pie chart, passes in the data and
-  // draws it.
-  function drawChart() {
-    // Create the data table.
-    var data = new google.visualization.DataTable();
-    data.addColumn("string", "Topping");
-    data.addColumn("number", "Slices");
-    data.addRows([
-        ["Mushrooms", Number(spreadsheetData[0])],
-        ["Onions",  Number(spreadsheetData[1])],
-        ["Olives",  Number(spreadsheetData[2])],
-        ["Zucchini",  Number(spreadsheetData[3])],
-        ["Pepperoni", Number(spreadsheetData[4])]
-    ]);
+    function drawChart() {
+   
+  
+        console.log("values "+Number(spreadsheetData[0]) );
+        var data = new google.visualization.DataTable();
+        data.addColumn('date', 'Date');
+        data.addColumn('number', 'Sold Pencils');
+        data.addColumn('string', 'title1');
+        data.addColumn('string', 'text1');
+        data.addColumn('number', 'Sold Pens');
+        data.addColumn('string', 'title2');
+        data.addColumn('string', 'text2');
+        data.addRows([
+          [new Date(2008, 1 ,1), Number(spreadsheetData[0]), undefined, undefined, 40645, undefined, undefined],
+          [new Date(2008, 1 ,2), 14045, undefined, undefined, 20374, undefined, undefined],
+          [new Date(2008, 1 ,3), 55022, undefined, undefined, 50766, undefined, undefined],
+          [new Date(2008, 1 ,4), 75284, undefined, undefined, 14334, 'Out of Stock','Ran out of stock on pens at 4pm'],
+          [new Date(2008, 1 ,5), 41476, 'Bought Pens','Bought 200k pens', 66467, undefined, undefined],
+          [new Date(2008, 1 ,6), 33322, undefined, undefined, 39463, undefined, undefined]
+        ]);
 
-    // Set chart options
-    var options = {
-      title: "How Much Pizza I Ate Last Night",
-      width: 400,
-      height: 300
-    };
-
-    // Instantiate and draw our chart, passing in some options.
-    var chart = new google.visualization.PieChart(
-      document.getElementById("chart_div")
-    );
-    chart.draw(data, options);
-  }
-}
+        var chart = new google.visualization.AnnotatedTimeLine(document.getElementById('chart_div'));
+        chart.draw(data, {displayAnnotations: true});
+      }
+    }  
 
 function init() {
   loadSpreadsheet().then(data => {
@@ -64,4 +60,6 @@ function init() {
   });
 }
 
+
 init();
+//init();
