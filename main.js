@@ -2,7 +2,7 @@ const dataUrl =
   "https://docs.google.com/spreadsheets/d/1R_QKcbUc5h2oBdMd4dkanDsOjyrgZsgQSQGOUCFqQ58/export?format=csv";
 
 // replace with a Ring class for all diagrams later..
-let CHARTS = [];
+let GOOGLE_CHARTS = [];
  
 
 class Diagram {
@@ -34,11 +34,11 @@ class Diagram {
       ]
     ]);
 }
-    let chart = new google.visualization.AnnotatedTimeLine(
+    let googleChart = new google.visualization.AnnotatedTimeLine(
       document.getElementById(this.domNode)
     );
-    chart.draw(data, { displayAnnotations: true });
-    return chart; 
+    googleChart.draw(data, { 'title':'Team 65', displayAnnotations: true, height: "100%"});  
+    return googleChart; 
   }
 }
 
@@ -63,8 +63,8 @@ function initGoogleCharts(data) {
 }
 
 function renderDiagrams(data) {
-  CHARTS.push( new Diagram("chart_div", data));
-  CHARTS.forEach( (chart)=> {chart.render()}) 
+  GOOGLE_CHARTS.push( new Diagram("chart_div", data));
+  GOOGLE_CHARTS.forEach( (chart)=> {chart.render()}) 
 }
 
 
@@ -74,7 +74,9 @@ function init() {
     console.log("data from spreadsheet " + dataUrl, data);
     initGoogleCharts(data); 
    
-    //window.addEventListener("resize", () => {});
+    window.addEventListener("resize", () => {
+      GOOGLE_CHARTS.forEach( (chart)=> {chart.render()}) 
+    });
   });
 }
 document.addEventListener("DOMContentLoaded", () => {
