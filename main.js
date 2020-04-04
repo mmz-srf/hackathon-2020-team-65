@@ -2,12 +2,10 @@ const DATA_URL =
   "https://docs.google.com/spreadsheets/d/1e774_OM0UWGInE252RC28uON9EgBK9CeFHucRi8CC4s/export?format=csv";
 
 const DATA_URL_NPI =
-  "https://docs.google.com/spreadsheets/d/1k4ajXFkkzY4zyVsJYXxTdGHwoiH-lBl7NLoLUObwhD8/edit#gid=0/export?format=csv";
+  "https://docs.google.com/spreadsheets/d/1k4ajXFkkzY4zyVsJYXxTdGHwoiH-lBl7NLoLUObwhD8/export?format=csv";
 
 // replace with a Ring class for all diagrams later..
 let GOOGLE_CHARTS = [];
-
- 
 
 class Diagram {
   constructor(domNode, data, options = {}) {
@@ -72,20 +70,37 @@ class Diagram {
     dataTable.addColumn({ type: "date", id: "Start" });
     dataTable.addColumn({ type: "date", id: "End" });
     let timetableDate = [];
-    console.log(this.data);
-    // parse measures start/end
-    this.data.dates.forEach((date, index) => {
-      console.log(date, index);
+    let labels = [];
+    this.data.npis.forEach((npi, index) => {
+      if (npi && index !== 0) {
+        labels.push(npi[0]);
+      }
+    });
+
+    labels.forEach((label, index) => {
+      let fromD = this.data.npis[index + 1][1];
+      let toD = this.data.npis[index + 1][2];
+      dataTable.addRows([
+        [String(index + 1), label, parseDate(fromD), parseDate(toD)],
+      ]);
     });
 
     dataTable.addRows([
-      ["1", "Total shudown", new Date(1788, 3, 30), new Date(1799, 2, 9)],
-      ["2", "Schools closed", new Date(1781, 3, 30), new Date(1801, 2, 4)],
-      ["3", "Travel Ban", new Date(1789, 3, 30), new Date(1809, 2, 4)],
+      [
+        "all",
+        "All NPIs",
+        new Date(this.data.dates[0]),
+        new Date(this.data.dates[this.data.dates.length - 1]),
+      ],
     ]);
 
     chart.draw(dataTable);
   }
+}
+
+function parseDate(csvDate) {
+  csvDate = csvDate.split(".");
+  return new Date(Number(csvDate[2]), csvDate[1] - 1, csvDate[0]);
 }
 
 function loadSpreadsheets() {
@@ -95,11 +110,10 @@ function loadSpreadsheets() {
       spreadsheets.data = data;
       loadSpreadsheet(DATA_URL_NPI).then((dataNpi) => {
         spreadsheets.dataNpi = dataNpi;
-        resolve(spreadsheets); 
+        resolve(spreadsheets);
       });
     });
-  })
-  
+  });
 }
 
 function loadSpreadsheet(url) {
@@ -131,7 +145,10 @@ function renderDiagrams(spreadsheets) {
   GOOGLE_CHARTS.push(
     new Diagram(
       "chart_div2",
-      { dates: fetchDatesFromCsv(spreadsheets.data), npis: spreadsheets.dataNpi },
+      {
+        dates: fetchDatesFromCsv(spreadsheets.data),
+        npis: spreadsheets.dataNpi,
+      },
       { type: "timeline" }
     )
   );
@@ -149,8 +166,8 @@ function fetchDatesFromCsv(data) {
 }
 
 function init() {
-  loadSpreadsheets().then((spreadsheets ) => {
-    initGoogleCharts( spreadsheets);
+  loadSpreadsheets().then((spreadsheets) => {
+    initGoogleCharts(spreadsheets);
 
     // responsive on resize window
     window.addEventListener("resize", () => {
@@ -158,7 +175,6 @@ function init() {
         chart.render();
       });
     });
-
   });
 }
 document.addEventListener("DOMContentLoaded", () => {
