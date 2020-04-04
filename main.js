@@ -1,8 +1,13 @@
-const dataUrl =
+const DATA_URL =
   "https://docs.google.com/spreadsheets/d/1e774_OM0UWGInE252RC28uON9EgBK9CeFHucRi8CC4s/export?format=csv";
+
+const DATA_URL_NPI =
+  "https://docs.google.com/spreadsheets/d/1k4ajXFkkzY4zyVsJYXxTdGHwoiH-lBl7NLoLUObwhD8/edit#gid=0/export?format=csv";
 
 // replace with a Ring class for all diagrams later..
 let GOOGLE_CHARTS = [];
+
+ 
 
 class Diagram {
   constructor(domNode, data, options = {}) {
@@ -57,58 +62,76 @@ class Diagram {
     return this.googleChart;
   }
   renderTimeline() {
-    let chart = new google.visualization.Timeline(document.getElementById(this.domNode));
+    let chart = new google.visualization.Timeline(
+      document.getElementById(this.domNode)
+    );
     let dataTable = new google.visualization.DataTable();
 
-    dataTable.addColumn({ type: 'string', id: 'Term' });
-    dataTable.addColumn({ type: 'string', id: 'Name' });
-    dataTable.addColumn({ type: 'date', id: 'Start' });
-    dataTable.addColumn({ type: 'date', id: 'End' });
+    dataTable.addColumn({ type: "string", id: "Term" });
+    dataTable.addColumn({ type: "string", id: "Name" });
+    dataTable.addColumn({ type: "date", id: "Start" });
+    dataTable.addColumn({ type: "date", id: "End" });
     let timetableDate = [];
-    // parse measures start/end 
-    this.data.y.forEach( (npi, index)=>{
-      console.log(npi, index)
-    })
-   
+    console.log(this.data);
+    // parse measures start/end
+    this.data.dates.forEach((date, index) => {
+      console.log(date, index);
+    });
+
     dataTable.addRows([
-      [ '1', 'Total shudown', new Date(1788, 3, 30), new Date(1799, 2, 9) ],
-      [ '2', 'Schools closed',new Date(1781, 3, 30),  new Date(1801, 2, 4) ],
-      [ '3', 'Travel Ban',  new Date(1789, 3, 30),  new Date(1809, 2, 4) ]]);
+      ["1", "Total shudown", new Date(1788, 3, 30), new Date(1799, 2, 9)],
+      ["2", "Schools closed", new Date(1781, 3, 30), new Date(1801, 2, 4)],
+      ["3", "Travel Ban", new Date(1789, 3, 30), new Date(1809, 2, 4)],
+    ]);
 
     chart.draw(dataTable);
   }
 }
 
-function loadSpreadsheet() {
-  return fetch(dataUrl)
+function loadSpreadsheets() {
+  let spreadsheets = {};
+  return new Promise((resolve, reject) => {
+    loadSpreadsheet(DATA_URL).then((data) => {
+      spreadsheets.data = data;
+      loadSpreadsheet(DATA_URL_NPI).then((dataNpi) => {
+        spreadsheets.dataNpi = dataNpi;
+        resolve(spreadsheets); 
+      });
+    });
+  })
+  
+}
+
+function loadSpreadsheet(url) {
+  return fetch(url)
     .then((response) => {
       return response.text();
     })
     .then((data) => {
       return CSV.parse(data);
     })
-    .catch(function (error) {
+    .catch((error) => {
       console.log("error: " + error);
     });
 }
 
-function initGoogleCharts(data) {
+function initGoogleCharts(spreadsheets) {
   google.charts.load("current", {
     packages: ["annotatedtimeline", "timeline"],
   });
   google.charts.setOnLoadCallback(() => {
-    renderDiagrams(data);
+    renderDiagrams(spreadsheets);
   });
 }
 
-function renderDiagrams(data) {
-  GOOGLE_CHARTS.push(new Diagram("chart_div", data));
+function renderDiagrams(spreadsheets) {
+  GOOGLE_CHARTS.push(new Diagram("chart_div", spreadsheets.data));
 
   let npiChartData = ["NPI1", "NPI1", "NPI1", "NPI1", "NPI2", "NPI2"];
   GOOGLE_CHARTS.push(
     new Diagram(
       "chart_div2",
-      { x: fetchDatesFromCsv(data), y: npiChartData },
+      { dates: fetchDatesFromCsv(spreadsheets.data), npis: spreadsheets.dataNpi },
       { type: "timeline" }
     )
   );
@@ -126,15 +149,16 @@ function fetchDatesFromCsv(data) {
 }
 
 function init() {
-  loadSpreadsheet().then((data) => {
-    console.log("data from spreadsheet " + dataUrl, data);
-    initGoogleCharts(data);
+  loadSpreadsheets().then((spreadsheets ) => {
+    initGoogleCharts( spreadsheets);
 
+    // responsive on resize window
     window.addEventListener("resize", () => {
       GOOGLE_CHARTS.forEach((chart) => {
         chart.render();
       });
     });
+
   });
 }
 document.addEventListener("DOMContentLoaded", () => {
