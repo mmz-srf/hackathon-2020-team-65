@@ -1,5 +1,5 @@
 const dataUrl =
-  "https://docs.google.com/spreadsheets/d/1R_QKcbUc5h2oBdMd4dkanDsOjyrgZsgQSQGOUCFqQ58/export?format=csv";
+  "https://docs.google.com/spreadsheets/d/1e774_OM0UWGInE252RC28uON9EgBK9CeFHucRi8CC4s/export?format=csv";
 
 // replace with a Ring class for all diagrams later..
 let GOOGLE_CHARTS = [];
@@ -19,20 +19,22 @@ class Diagram {
     data.addColumn("number", "Some Metric");
     data.addColumn("string", "title2");
     data.addColumn("string", "text2");
-    for (let day = 1; day < 10; day++) {
-    var res = this.data[day][0].split("-");
-     console.log("dates " + this.data[day][1]);
-    data.addRows([
-      [
-        new Date(Number(res[0]), res[1]-1, res[2]),
-        Number(this.data[day][1]),
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-      ]
-    ]);
+    var totdays = this.data.length;
+
+    for (let day = 1; day < totdays; day++) {
+      var res = this.data[day][0].split(".");
+      console.log("dates " + this.data[day][1]);
+      data.addRows([
+        [
+          new Date(Number(res[2]), res[1]-1, res[0]),
+          Number(this.data[day][1]),
+          undefined,
+          undefined,
+          Number(this.data[day][3]),
+          undefined,
+          undefined,
+        ]
+      ]);
 }
     let googleChart = new google.visualization.AnnotatedTimeLine(
       document.getElementById(this.domNode)
