@@ -99,13 +99,21 @@ class Diagram {
     dataTable.addRows([
       [
         "all",
-        "All NPIs",
+        "Indicator Values Timeframe",
         new Date(parseDate(this.dataNpi.dates[0])),
         new Date(parseDate(this.dataNpi.dates[this.dataNpi.dates.length - 1])),
       ],
     ]);
-
-    googleChart.draw(dataTable);
+    let view = new google.visualization.DataView(dataTable);
+    view.hideRows([1]); 
+    view.hideRows([2]);
+    view.hideRows([3]);  
+    view.hideRows([4]); 
+    var options = {
+     // colors: colors,
+      timeline: { showBarLabels: true, enableInteractivity: false }
+    };
+    googleChart.draw(dataTable, options);
   }
 }
 
