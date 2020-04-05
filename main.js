@@ -66,6 +66,7 @@ class Diagram {
     googleChart.draw(data, {
       title: "Team 65",
       displayAnnotations: true,
+      displayZoomButtons: false
     });
   }
   renderSecond() {
