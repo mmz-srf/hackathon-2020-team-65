@@ -39,8 +39,6 @@ class Diagram {
     this.renderNPITimeline();
   }
   renderFirst() {
-    this.renderThird();
-    return false;
     //Assumed daily cases
     let data = new google.visualization.DataTable();
     data.addColumn("date", "Date");
@@ -49,7 +47,7 @@ class Diagram {
     data.addColumn("number", "Daily fatalities");
     data.addColumn("string", "title1");
     var totdays = this.data.length;
-
+ 
     for (let day = 1; day < totdays; day++) {
       if(this.data[day][0] === null) {
         continue; 
@@ -57,12 +55,16 @@ class Diagram {
       var res = this.data[day][0].split(".");
       //console.log("dates " + this.data[day][1]);
 
+      let date = new Date(Number(res[2]), res[1] - 1, res[0])
+      let val1 = this.data[day][1] || 0; 
+      let val2 = this.data[day][3] || 0; 
+      let val3 = this.data[day][2] || 0; 
       data.addRows([
         [
-          new Date(Number(res[2]), res[1] - 1, res[0]),
-          Number(this.data[day][1]),
-          Number(this.data[day][3]),
-          Number(this.data[day][2]),
+          date,
+          val1,
+          val2,
+          val3,
           undefined,
         ],
       ]);
