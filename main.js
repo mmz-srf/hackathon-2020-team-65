@@ -1,5 +1,5 @@
 const DATA_URL =
-  "https://docs.google.com/spreadsheets/d/1WTd7heLSzrK0stL520PAQ1C3XJR7TdfaIacg3hvVDqI/export?format=csv";
+  "https://docs.google.com/spreadsheets/d/1e774_OM0UWGInE252RC28uON9EgBK9CeFHucRi8CC4s/export?format=csv";
 
 const DATA_URL_NPI =
   "https://docs.google.com/spreadsheets/d/1k4ajXFkkzY4zyVsJYXxTdGHwoiH-lBl7NLoLUObwhD8/export?format=csv";
@@ -34,6 +34,7 @@ class Diagram {
   }
   renderFirst() {
     let data = new google.visualization.DataTable();
+  
     data.addColumn("date", "Date");
     data.addColumn("number", "New Cases");
     data.addColumn("string", "title1");
@@ -41,22 +42,22 @@ class Diagram {
     data.addColumn("number", "Some Metric");
     data.addColumn("string", "title2");
     data.addColumn("string", "text2");
-    var totdays = this.data.length;
-
+    console.log("lllarray", this.data.length);
+    var totdays = this.data.length
     for (let day = 1; day < totdays; day++) {
-      var res = this.data[day][0].split(".");
-      //console.log("dates " + this.data[day][1]);
-      data.addRows([
-        [
-          new Date(Number(res[2]), res[1] - 1, res[0]),
-          Number(this.data[day][1]),
-          undefined,
-          undefined,
-          Number(this.data[day][3]),
-          undefined,
-          undefined,
-        ],
-      ]);
+    var res = this.data[day][0].split(".");
+     console.log("dates " + this.data[day][1]);
+    data.addRows([
+      [
+        new Date(Number(res[2]), res[1]-1, res[0]),
+        Number(this.data[day][1]),
+        undefined,
+        undefined,
+        Number(this.data[day][3]),
+        undefined,
+        undefined,
+      ]
+    ]);
     }
 
     let googleChart = new google.visualization.AnnotatedTimeLine(
