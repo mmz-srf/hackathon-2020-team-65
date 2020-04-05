@@ -4,8 +4,6 @@ const DATA_URL =
 const DATA_URL_NPI =
   "https://docs.google.com/spreadsheets/d/1k4ajXFkkzY4zyVsJYXxTdGHwoiH-lBl7NLoLUObwhD8/export?format=csv";
 
-// replace with a Ring class for all diagrams later..
-let GOOGLE_CHARTS = [];
 
 class Diagram {
   constructor(domNode, npiDomNode, data, dataNpi, options = {}) {
@@ -60,7 +58,6 @@ class Diagram {
       title: "Team 65",
       displayAnnotations: true,
     });
-    GOOGLE_CHARTS.push(googleChart) ;
   }
   renderSecond() {
     // replace with custom code
@@ -108,7 +105,6 @@ class Diagram {
     ]);
 
     googleChart.draw(dataTable);
-    GOOGLE_CHARTS.push(this.googleChart) ;
   }
 }
 
@@ -161,12 +157,7 @@ function renderDiagrams(spreadsheets) {
   let diagram2 = new Diagram("chart_2", "chart_2_npi",spreadsheets.data, npiData,{type:"second"})
   let diagram3 = new Diagram("chart_3", "chart_3_npi",spreadsheets.data, npiData,{type:"third"})
 
-
-
-  //GOOGLE_CHARTS.push(new Diagram("chart_div", "chart_div2",spreadsheets.data, npiData));
-  GOOGLE_CHARTS.forEach((chart) => {
-    //chart.render();
-  });
+ 
 }
 
 function fetchDatesFromCsv(data) {
@@ -181,12 +172,14 @@ function init() {
   loadSpreadsheets().then((spreadsheets) => {
     initGoogleCharts(spreadsheets);
 
-    // responsive on resize window
+    // responsive on resize window, lets forget about this now
+    /*
     window.addEventListener("resize", () => {
       GOOGLE_CHARTS.forEach((chart) => {
         chart.render();
       });
     });
+    */
   });
 }
 document.addEventListener("DOMContentLoaded", () => {
