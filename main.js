@@ -33,31 +33,28 @@ class Diagram {
     this.renderNPITimeline();
   }
   renderFirst() {
+    //Assumed daily cases
     let data = new google.visualization.DataTable();
-  
     data.addColumn("date", "Date");
-    data.addColumn("number", "New Cases");
+    data.addColumn("number", "Daily confirmed new cases");
+    data.addColumn("number", "Assumed daily cases");
+    data.addColumn("number", "Daily fatalities");
     data.addColumn("string", "title1");
-    data.addColumn("string", "text1");
-    data.addColumn("number", "Some Metric");
-    data.addColumn("string", "title2");
-    data.addColumn("string", "text2");
-    console.log("lllarray", this.data.length);
-    var totdays = this.data.length
+    var totdays = this.data.length;
+
     for (let day = 1; day < totdays; day++) {
-    var res = this.data[day][0].split(".");
-     console.log("dates " + this.data[day][1]);
-    data.addRows([
-      [
-        new Date(Number(res[2]), res[1]-1, res[0]),
-        Number(this.data[day][1]),
-        undefined,
-        undefined,
-        Number(this.data[day][3]),
-        undefined,
-        undefined,
-      ]
-    ]);
+      var res = this.data[day][0].split(".");
+      //console.log("dates " + this.data[day][1]);
+
+      data.addRows([
+        [
+          new Date(Number(res[2]), res[1] - 1, res[0]),
+          Number(this.data[day][1]),
+          Number(this.data[day][3]),
+          Number(this.data[day][2]),
+          undefined,
+        ],
+      ]);
     }
 
     let googleChart = new google.visualization.AnnotatedTimeLine(
@@ -69,14 +66,66 @@ class Diagram {
       displayZoomButtons: false
     });
   }
+
   renderSecond() {
-    // replace with custom code
-    this.renderFirst();
+
+    let data = new google.visualization.DataTable();
+    data.addColumn("date", "Date");
+    data.addColumn("number", "Unemployment");
+    data.addColumn("string", "title1");
+    var totdays = this.data.length;
+    for (let day = 1; day < totdays; day++) {
+      var res = this.data[day][0].split(".");
+      //console.log("dates " + this.data[day][1]);
+
+      data.addRows([
+        [
+          new Date(Number(res[2]), res[1] - 1, res[0]),
+          Number(this.data[day][5]),
+          undefined,
+        ],
+      ]);
+    }
+
+    let googleChart = new google.visualization.AnnotatedTimeLine(
+      document.getElementById(this.domNode)
+    );
+    googleChart.draw(data, {
+      title: "Team 65",
+      displayAnnotations: true,
+      displayZoomButtons: false
+    });
   }
 
   renderThird() {
-    // replace with custom code
-    this.renderFirst();
+
+    let data = new google.visualization.DataTable();
+    data.addColumn("date", "Date");
+    data.addColumn("number", "Electricity");
+    data.addColumn("string", "title1");
+    var totdays = this.data.length;
+
+    for (let day = 1; day < totdays; day++) {
+      var res = this.data[day][0].split(".");
+      //console.log("dates " + this.data[day][1]);
+
+      data.addRows([
+        [
+          new Date(Number(res[2]), res[1] - 1, res[0]),
+          Number(this.data[day][6]),
+          undefined,
+        ],
+      ]);
+    }
+
+    let googleChart = new google.visualization.AnnotatedTimeLine(
+      document.getElementById(this.domNode)
+    );
+    googleChart.draw(data, {
+      title: "Team 65",
+      displayAnnotations: true,
+      displayZoomButtons: false
+    });
   }
 
   renderNPITimeline() {
