@@ -1,18 +1,26 @@
 const DATA_URL =
-  "https://docs.google.com/spreadsheets/d/1e774_OM0UWGInE252RC28uON9EgBK9CeFHucRi8CC4s/export?format=csv";
+  "https://docs.google.com/spreadsheets/d/1WTd7heLSzrK0stL520PAQ1C3XJR7TdfaIacg3hvVDqI/export?format=csv";
 
 const DATA_URL_NPI =
   "https://docs.google.com/spreadsheets/d/1k4ajXFkkzY4zyVsJYXxTdGHwoiH-lBl7NLoLUObwhD8/export?format=csv";
 
-
 class Diagram {
-  constructor(domNode, npiDomNode, data, dataNpi, options = {}) {
+  constructor(
+    domNode,
+    npiDomNode,
+    npiSelectDomNode,
+    data,
+    dataNpi,
+    options = {}
+  ) {
     this.domNode = domNode;
     this.npiDomNode = npiDomNode;
+    this.npiDomSelectNode = npiSelectDomNode;
     this.data = data;
     this.dataNpi = dataNpi;
+
     this.type = options && options.type ? options.type : "first";
-    this.render()
+    this.render();
   }
   render() {
     if (this.type === "first") {
@@ -21,7 +29,7 @@ class Diagram {
       this.renderSecond();
     } else if (this.type === "third") {
       this.renderThird();
-    } 
+    }
     this.renderNPITimeline();
   }
   renderFirst() {
@@ -87,15 +95,16 @@ class Diagram {
       }
     });
 
+    this.renderNpiSelect(labels);
+
     labels.forEach((label, index) => {
       let fromD = this.dataNpi.npis[index + 1][1];
       let toD = this.dataNpi.npis[index + 1][2];
-      console.log(fromD, toD, parseDate(fromD),parseDate(toD) )
       dataTable.addRows([
         [String(index + 1), label, parseDate(fromD), parseDate(toD)],
       ]);
     });
-   
+
     dataTable.addRows([
       [
         "all",
@@ -104,16 +113,34 @@ class Diagram {
         new Date(parseDate(this.dataNpi.dates[this.dataNpi.dates.length - 1])),
       ],
     ]);
+    /*
     let view = new google.visualization.DataView(dataTable);
     view.hideRows([1]); 
     view.hideRows([2]);
     view.hideRows([3]);  
-    view.hideRows([4]); 
+    view.hideRows([4]);
+    */
+
     var options = {
-     // colors: colors,
-      timeline: { showBarLabels: true, enableInteractivity: false }
+      // colors: colors,
+      timeline: { showBarLabels: true, enableInteractivity: false },
     };
     googleChart.draw(dataTable, options);
+  }
+
+  renderNpiSelect(labels) {
+    let $node = $(this.npiDomSelectNode);
+
+    labels.forEach((label, index) => {
+      $node.append("<option value=" + index + ">" + label + "</option>");
+      console.log("label", label, index);
+    });
+    let select2 = $node.select2({
+      placeholder: "Select non pharmaceutical interventions",
+    });
+    select2.on("change", (e) => {
+      console.log(e);
+    });
   }
 }
 
@@ -161,12 +188,31 @@ function renderDiagrams(spreadsheets) {
   let npiData = {
     dates: fetchDatesFromCsv(spreadsheets.data),
     npis: spreadsheets.dataNpi,
-  }
-  let diagram1 = new Diagram("chart_1", "chart_1_npi",spreadsheets.data, npiData, {type:"first"});
-  let diagram2 = new Diagram("chart_2", "chart_2_npi",spreadsheets.data, npiData,{type:"second"})
-  let diagram3 = new Diagram("chart_3", "chart_3_npi",spreadsheets.data, npiData,{type:"third"})
-
- 
+  };
+  let diagram1 = new Diagram(
+    "chart_1",
+    "chart_1_npi",
+    "#npi_multi_select1",
+    spreadsheets.data,
+    npiData,
+    { type: "first" }
+  );
+  let diagram2 = new Diagram(
+    "chart_2",
+    "chart_2_npi",
+    "#npi_multi_select2",
+    spreadsheets.data,
+    npiData,
+    { type: "second" }
+  );
+  let diagram3 = new Diagram(
+    "chart_3",
+    "chart_3_npi",
+    "#npi_multi_select3",
+    spreadsheets.data,
+    npiData,
+    { type: "third" }
+  );
 }
 
 function fetchDatesFromCsv(data) {
