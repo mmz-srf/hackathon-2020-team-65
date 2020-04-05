@@ -1,10 +1,9 @@
-const DATA_URL =
-  "https://docs.google.com/spreadsheets/d/1e774_OM0UWGInE252RC28uON9EgBK9CeFHucRi8CC4s/export?format=csv";
-
+//const DATA_URL ="https://docs.google.com/spreadsheets/d/1e774_OM0UWGInE252RC28uON9EgBK9CeFHucRi8CC4s/export?format=csv";
+const DATA_URL = "https://docs.google.com/spreadsheets/d/1w6w22A7CjKkDafx1qoLGVH-yshx0t44zEqN2CIZxP_E/export?format=csv"
 const DATA_URL_NPI =
   "https://docs.google.com/spreadsheets/d/1k4ajXFkkzY4zyVsJYXxTdGHwoiH-lBl7NLoLUObwhD8/export?format=csv";
 
-const DEFAULT_NPI_OPTIONS = [];
+const DEFAULT_NPI_OPTIONS = [ ];
 
 class Diagram {
   constructor(
@@ -189,7 +188,7 @@ class Diagram {
     });
     select2.off("change");
     select2.on("change", (e) => {
-      this.selectedOptions = [];
+      this.selectedOptions = DEFAULT_NPI_OPTIONS;
       let selected = $node.find(":selected");
       selected.each((i, s) => {
         this.selectedOptions.push(Number(s.value));
