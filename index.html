@@ -178,7 +178,7 @@
           <ul class="nav flex-column mb-2">
             <li class="nav-item">
               <a id="btnChart1" class="nav-link active" href="#">
-                Chart 1
+                Health data
               </a>
             </li>
             <li class="nav-item">
@@ -188,7 +188,13 @@
             </li>
             <li class="nav-item">
               <a id="btnChart3" class="nav-link" href="#">
-                Chart 3
+                Partial work
+              </a>
+            </li>
+
+            <li class="nav-item">
+              <a id="btnChart4" class="nav-link" href="#">
+                Power consumption
               </a>
             </li>
           </ul>
@@ -214,22 +220,33 @@
         </div>
 
         <div id="first_chart_container">
+          <h3>Health</h3>
           <div class="my-4" id="chart_1" style="width: 99%; min-height:50vh;"></div>
           <select id="npi_multi_select1" class="js-example-basic-multiple" name="npis[]" multiple="multiple"></select>
           <div class="my-4" id="chart_1_npi" style="width: 99%; min-height:50vh;"></div>
         </div>
 
         <div id="second_chart_container" style="display: none;">
+          <h3>Default</h3>
           <div class="my-4" id="chart_2" style="width: 99%; min-height:50vh;"></div>
           <select id="npi_multi_select2" class="js-example-basic-multiple" name="npis[]" multiple="multiple"></select>
           <div class="my-4" id="chart_2_npi" style="width: 99%; min-height:50vh;"></div>
         </div>
 
         <div id="third_chart_container" style="display: none;">
+          <h3>Partial Work</h3>
           <div class="my-4" id="chart_3" style="width: 99%; min-height:50vh;"></div>
           <select id="npi_multi_select3" class="js-example-basic-multiple" name="npis[]" multiple="multiple"></select>
           <div class="my-4" id="chart_3_npi" style="width: 99%; min-height:50vh;"></div>
         </div>
+
+        <div id="fourth_chart_container" style="display: none;">
+          <h3>Power consumption</h3>
+          <div class="my-4" id="chart_4" style="width: 99%; min-height:50vh;"></div>
+          <select id="npi_multi_select3" class="js-example-basic-multiple" name="npis[]" multiple="multiple"></select>
+          <div class="my-4" id="chart_4_npi" style="width: 99%; min-height:50vh;"></div>
+        </div>
+
       </main>
     </div>
   </div>

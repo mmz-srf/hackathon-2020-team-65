@@ -33,6 +33,8 @@ class Diagram {
       this.renderSecond();
     } else if (this.type === "third") {
       this.renderThird();
+    }else if (this.type === "fourth") {
+      this.renderFourth();
     }
     this.renderNPITimeline();
   }
@@ -137,6 +139,10 @@ class Diagram {
       displayAnnotations: true,
       displayZoomButtons: false,
     });
+  }
+
+  renderFourth(){
+    this.renderThird();
   }
 
   renderNPITimeline() {
@@ -279,6 +285,14 @@ function renderDiagrams(spreadsheets) {
     npiData,
     { type: "third" }
   );
+  let diagram4 = new Diagram(
+    "chart_4",
+    "chart_4_npi",
+    "#npi_multi_select4",
+    spreadsheets.data,
+    npiData,
+    { type: "fourth" }
+  );
 }
 
 function fetchDatesFromCsv(data) {
@@ -292,15 +306,7 @@ function fetchDatesFromCsv(data) {
 function init() {
   loadSpreadsheets().then((spreadsheets) => {
     initGoogleCharts(spreadsheets);
-
-    // responsive on resize window, lets forget about this now
-    /*
-    window.addEventListener("resize", () => {
-      GOOGLE_CHARTS.forEach((chart) => {
-        chart.render();
-      });
-    });
-    */
+ 
   });
 }
 document.addEventListener("DOMContentLoaded", () => {
