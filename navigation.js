@@ -17,6 +17,8 @@ document.addEventListener("DOMContentLoaded", () => {
         secondChart.style.display = "none";
         thirdChart.style.display = "none";
         fourthChart.style.display = "none";
+        $("#btnChart2").parents().find("a").removeClass("active");
+        $("#btnChart1").find("a").addClass("active");
     });
 
     btnChart2.addEventListener("click", function(){
@@ -25,6 +27,8 @@ document.addEventListener("DOMContentLoaded", () => {
         secondChart.style.display = "block";
         thirdChart.style.display = "none";  
         fourthChart.style.display = "none";
+        $("#btnChart2").parents().find("a").removeClass("active");
+        $("#btnChart2").find("a").addClass("active");
     });
 
     btnChart3.addEventListener("click", function(){
@@ -33,6 +37,8 @@ document.addEventListener("DOMContentLoaded", () => {
         secondChart.style.display = "none";
         thirdChart.style.display = "block";
         fourthChart.style.display = "none";
+        $("#btnChart2").parents().find("a").removeClass("active");
+        $("#btnChart3").find("a").addClass("active");
     });
 
     btnChart4.addEventListener("click", function(){
@@ -41,6 +47,8 @@ document.addEventListener("DOMContentLoaded", () => {
         secondChart.style.display = "none";
         thirdChart.style.display = "none";
         fourthChart.style.display = "block";
+        $("#btnChart2").parents().find("a").removeClass("active");
+        $("#btnChart4").find("a").addClass("active");
     });
 
 });
