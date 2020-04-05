@@ -90,17 +90,18 @@ class Diagram {
     labels.forEach((label, index) => {
       let fromD = this.dataNpi.npis[index + 1][1];
       let toD = this.dataNpi.npis[index + 1][2];
+      console.log(fromD, toD, parseDate(fromD),parseDate(toD) )
       dataTable.addRows([
         [String(index + 1), label, parseDate(fromD), parseDate(toD)],
       ]);
     });
-
+   
     dataTable.addRows([
       [
         "all",
         "All NPIs",
-        new Date(this.dataNpi.dates[0]),
-        new Date(this.dataNpi.dates[this.dataNpi.dates.length - 1]),
+        new Date(parseDate(this.dataNpi.dates[0])),
+        new Date(parseDate(this.dataNpi.dates[this.dataNpi.dates.length - 1])),
       ],
     ]);
 
