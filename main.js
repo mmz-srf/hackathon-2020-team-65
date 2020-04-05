@@ -4,6 +4,8 @@ const DATA_URL =
 const DATA_URL_NPI =
   "https://docs.google.com/spreadsheets/d/1k4ajXFkkzY4zyVsJYXxTdGHwoiH-lBl7NLoLUObwhD8/export?format=csv";
 
+const DEFAULT_NPI_OPTIONS = [1, 3, 4];
+
 class Diagram {
   constructor(
     domNode,
@@ -18,6 +20,7 @@ class Diagram {
     this.npiDomSelectNode = npiSelectDomNode;
     this.data = data;
     this.dataNpi = dataNpi;
+    this.selectedOptions = DEFAULT_NPI_OPTIONS;
 
     this.type = options && options.type ? options.type : "first";
     this.render();
@@ -61,14 +64,13 @@ class Diagram {
       document.getElementById(this.domNode)
     );
     googleChart.draw(data, {
-      title: "Team 65",
+      title: " ",
       displayAnnotations: true,
-      displayZoomButtons: false
+      displayZoomButtons: false,
     });
   }
 
   renderSecond() {
-
     let data = new google.visualization.DataTable();
     data.addColumn("date", "Date");
     data.addColumn("number", "Unemployment");
@@ -93,12 +95,11 @@ class Diagram {
     googleChart.draw(data, {
       title: "Team 65",
       displayAnnotations: true,
-      displayZoomButtons: false
+      displayZoomButtons: false,
     });
   }
 
   renderThird() {
-
     let data = new google.visualization.DataTable();
     data.addColumn("date", "Date");
     data.addColumn("number", "Electricity");
@@ -124,7 +125,7 @@ class Diagram {
     googleChart.draw(data, {
       title: "Team 65",
       displayAnnotations: true,
-      displayZoomButtons: false
+      displayZoomButtons: false,
     });
   }
 
@@ -140,6 +141,7 @@ class Diagram {
     dataTable.addColumn({ type: "date", id: "End" });
     let timetableDate = [];
     let labels = [];
+    let allLabels = [];
     this.dataNpi.npis.forEach((npi, index) => {
       if (npi && index !== 0) {
         labels.push(npi[0]);
@@ -149,11 +151,13 @@ class Diagram {
     this.renderNpiSelect(labels);
 
     labels.forEach((label, index) => {
-      let fromD = this.dataNpi.npis[index + 1][1];
-      let toD = this.dataNpi.npis[index + 1][2];
-      dataTable.addRows([
-        [String(index + 1), label, parseDate(fromD), parseDate(toD)],
-      ]);
+      if (this.selectedOptions.includes(index)) {
+        let fromD = this.dataNpi.npis[index + 1][1];
+        let toD = this.dataNpi.npis[index + 1][2];
+        dataTable.addRows([
+          [String(index + 1), label, parseDate(fromD), parseDate(toD)],
+        ]);
+      }
     });
 
     dataTable.addRows([
@@ -164,14 +168,6 @@ class Diagram {
         new Date(parseDate(this.dataNpi.dates[this.dataNpi.dates.length - 1])),
       ],
     ]);
-    /*
-    let view = new google.visualization.DataView(dataTable);
-    view.hideRows([1]); 
-    view.hideRows([2]);
-    view.hideRows([3]);  
-    view.hideRows([4]);
-    */
-
     var options = {
       // colors: colors,
       timeline: { showBarLabels: true, enableInteractivity: false },
@@ -184,13 +180,17 @@ class Diagram {
 
     labels.forEach((label, index) => {
       $node.append("<option value=" + index + ">" + label + "</option>");
-      console.log("label", label, index);
     });
     let select2 = $node.select2({
       placeholder: "Select non pharmaceutical interventions",
     });
+    select2.off("change");
     select2.on("change", (e) => {
-      console.log(e);
+      let selected = $node.find(":selected");
+      selected.each((i, s) => {
+        this.selectedOptions.push(Number(s.value));
+      });
+      this.renderNPITimeline();
     });
   }
 }
