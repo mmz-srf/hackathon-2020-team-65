@@ -30,8 +30,8 @@ document.addEventListener("DOMContentLoaded", () => {
     btnChart3.addEventListener("click", function(){
         init();
         firstChart.style.display = "none";
-        secondChart.style.display = "block";
-        thirdChart.style.display = "none";
+        secondChart.style.display = "none";
+        thirdChart.style.display = "block";
         fourthChart.style.display = "none";
     });
 
