@@ -1,5 +1,7 @@
-//const DATA_URL ="https://docs.google.com/spreadsheets/d/1e774_OM0UWGInE252RC28uON9EgBK9CeFHucRi8CC4s/export?format=csv";
-const DATA_URL = "https://docs.google.com/spreadsheets/d/1w6w22A7CjKkDafx1qoLGVH-yshx0t44zEqN2CIZxP_E/export?format=csv"
+const DATA_URL ="https://docs.google.com/spreadsheets/d/1e774_OM0UWGInE252RC28uON9EgBK9CeFHucRi8CC4s/export?format=csv";
+// backup 
+//const DATA_URL = "https://docs.google.com/spreadsheets/d/1w6w22A7CjKkDafx1qoLGVH-yshx0t44zEqN2CIZxP_E/export?format=csv"
+
 const DATA_URL_NPI =
   "https://docs.google.com/spreadsheets/d/1k4ajXFkkzY4zyVsJYXxTdGHwoiH-lBl7NLoLUObwhD8/export?format=csv";
 
@@ -45,6 +47,9 @@ class Diagram {
     var totdays = this.data.length;
 
     for (let day = 1; day < totdays; day++) {
+      if(this.data[day][0] === null) {
+        continue; 
+      }
       var res = this.data[day][0].split(".");
       //console.log("dates " + this.data[day][1]);
 
@@ -76,6 +81,9 @@ class Diagram {
     data.addColumn("string", "title1");
     var totdays = this.data.length;
     for (let day = 1; day < totdays; day++) {
+      if(this.data[day][0] === null) {
+        continue; 
+      }
       var res = this.data[day][0].split(".");
       //console.log("dates " + this.data[day][1]);
 
@@ -106,6 +114,9 @@ class Diagram {
     var totdays = this.data.length;
 
     for (let day = 1; day < totdays; day++) {
+      if(this.data[day][0] === null) {
+        continue; 
+      }
       var res = this.data[day][0].split(".");
       //console.log("dates " + this.data[day][1]);
 
