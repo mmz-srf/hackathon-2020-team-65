@@ -142,7 +142,36 @@ class Diagram {
   }
 
   renderFourth(){
-    this.renderThird();
+    let data = new google.visualization.DataTable();
+    data.addColumn("date", "Date");
+    data.addColumn("number", "Pollution, Particulate Matter, Zurich Kaserne, [µg/m3]");
+    data.addColumn("string", "title1");
+    var totdays = this.data.length;
+
+    for (let day = 1; day < totdays; day++) {
+      if(this.data[day][0] === null) {
+        continue; 
+      }
+      var res = this.data[day][0].split(".");
+      //console.log("dates " + this.data[day][1]);
+
+      data.addRows([
+        [
+          new Date(Number(res[2]), res[1] - 1, res[0]),
+          Number(this.data[day][6]),
+          undefined,
+        ],
+      ]);
+    }
+
+    let googleChart = new google.visualization.AnnotatedTimeLine(
+      document.getElementById(this.domNode)
+    );
+    googleChart.draw(data, {
+      title: "Team 65",
+      displayAnnotations: true,
+      displayZoomButtons: false,
+    });
   }
 
   renderNPITimeline() {
