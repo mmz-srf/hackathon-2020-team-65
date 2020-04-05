@@ -4,7 +4,7 @@ const DATA_URL =
 const DATA_URL_NPI =
   "https://docs.google.com/spreadsheets/d/1k4ajXFkkzY4zyVsJYXxTdGHwoiH-lBl7NLoLUObwhD8/export?format=csv";
 
-const DEFAULT_NPI_OPTIONS = [1, 3, 4];
+const DEFAULT_NPI_OPTIONS = [];
 
 class Diagram {
   constructor(
@@ -160,6 +160,8 @@ class Diagram {
       }
     });
 
+   
+
     dataTable.addRows([
       [
         "all",
@@ -179,17 +181,20 @@ class Diagram {
     let $node = $(this.npiDomSelectNode);
 
     labels.forEach((label, index) => {
-      $node.append("<option value=" + index + ">" + label + "</option>");
+      let isSelected = this.selectedOptions.includes(index);
+      $node.append("<option "+ (isSelected ? 'selected': '') + "value=" + index + ">" + label + "</option>");
     });
     let select2 = $node.select2({
       placeholder: "Select non pharmaceutical interventions",
     });
     select2.off("change");
     select2.on("change", (e) => {
+      this.selectedOptions = [];
       let selected = $node.find(":selected");
       selected.each((i, s) => {
         this.selectedOptions.push(Number(s.value));
       });
+      
       this.renderNPITimeline();
     });
   }
