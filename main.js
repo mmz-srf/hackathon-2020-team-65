@@ -39,6 +39,8 @@ class Diagram {
     this.renderNPITimeline();
   }
   renderFirst() {
+    this.renderThird();
+    return false;
     //Assumed daily cases
     let data = new google.visualization.DataTable();
     data.addColumn("date", "Date");
