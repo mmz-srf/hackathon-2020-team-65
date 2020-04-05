@@ -77,7 +77,7 @@ class Diagram {
   renderSecond() {
     let data = new google.visualization.DataTable();
     data.addColumn("date", "Date");
-    data.addColumn("number", "Unemployment");
+    data.addColumn("number", "Demands of credits by businesses in CHF (bn)");
     data.addColumn("string", "title1");
     var totdays = this.data.length;
     for (let day = 1; day < totdays; day++) {
@@ -90,7 +90,7 @@ class Diagram {
       data.addRows([
         [
           new Date(Number(res[2]), res[1] - 1, res[0]),
-          Number(this.data[day][5]),
+          Number(this.data[day][4]),
           undefined,
         ],
       ]);
@@ -109,7 +109,7 @@ class Diagram {
   renderThird() {
     let data = new google.visualization.DataTable();
     data.addColumn("date", "Date");
-    data.addColumn("number", "Electricity");
+    data.addColumn("number", "Partial work in Tausand persons");
     data.addColumn("string", "title1");
     var totdays = this.data.length;
 
@@ -123,7 +123,7 @@ class Diagram {
       data.addRows([
         [
           new Date(Number(res[2]), res[1] - 1, res[0]),
-          Number(this.data[day][6]),
+          Number(this.data[day][5]),
           undefined,
         ],
       ]);
