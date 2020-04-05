@@ -8,22 +8,25 @@ const DATA_URL_NPI =
 let GOOGLE_CHARTS = [];
 
 class Diagram {
-  constructor(domNode, data, options = {}) {
+  constructor(domNode, npiDomNode, data, dataNpi, options = {}) {
     this.domNode = domNode;
+    this.npiDomNode = npiDomNode;
     this.data = data;
-    this.type = options && options.type ? options.type : "annotatedtimeline";
-    this.googleChart = null;
+    this.dataNpi = dataNpi;
+    this.type = options && options.type ? options.type : "first";
+    this.render()
   }
   render() {
-    if (this.type === "annotatedtimeline") {
-      this.renderAnnotatedtimeline();
-    } else if (this.type === "timeline") {
-      this.renderTimeline();
-    } else {
-      throw "invalid chart type" + this.type;
-    }
+    if (this.type === "first") {
+      this.renderFirst();
+    } else if (this.type === "second") {
+      this.renderSecond();
+    } else if (this.type === "third") {
+      this.renderThird();
+    } 
+    this.renderNPITimeline();
   }
-  renderAnnotatedtimeline() {
+  renderFirst() {
     let data = new google.visualization.DataTable();
     data.addColumn("date", "Date");
     data.addColumn("number", "New Cases");
@@ -36,7 +39,7 @@ class Diagram {
 
     for (let day = 1; day < totdays; day++) {
       var res = this.data[day][0].split(".");
-      console.log("dates " + this.data[day][1]);
+      //console.log("dates " + this.data[day][1]);
       data.addRows([
         [
           new Date(Number(res[2]), res[1] - 1, res[0]),
@@ -50,18 +53,28 @@ class Diagram {
       ]);
     }
 
-    this.googleChart = new google.visualization.AnnotatedTimeLine(
+    let googleChart = new google.visualization.AnnotatedTimeLine(
       document.getElementById(this.domNode)
     );
-    this.googleChart.draw(data, {
+    googleChart.draw(data, {
       title: "Team 65",
       displayAnnotations: true,
     });
-    return this.googleChart;
+    GOOGLE_CHARTS.push(googleChart) ;
   }
-  renderTimeline() {
-    let chart = new google.visualization.Timeline(
-      document.getElementById(this.domNode)
+  renderSecond() {
+    // replace with custom code
+    this.renderFirst();
+  }
+
+  renderThird() {
+    // replace with custom code
+    this.renderFirst();
+  }
+
+  renderNPITimeline() {
+    let googleChart = new google.visualization.Timeline(
+      document.getElementById(this.npiDomNode)
     );
     let dataTable = new google.visualization.DataTable();
 
@@ -71,15 +84,15 @@ class Diagram {
     dataTable.addColumn({ type: "date", id: "End" });
     let timetableDate = [];
     let labels = [];
-    this.data.npis.forEach((npi, index) => {
+    this.dataNpi.npis.forEach((npi, index) => {
       if (npi && index !== 0) {
         labels.push(npi[0]);
       }
     });
 
     labels.forEach((label, index) => {
-      let fromD = this.data.npis[index + 1][1];
-      let toD = this.data.npis[index + 1][2];
+      let fromD = this.dataNpi.npis[index + 1][1];
+      let toD = this.dataNpi.npis[index + 1][2];
       dataTable.addRows([
         [String(index + 1), label, parseDate(fromD), parseDate(toD)],
       ]);
@@ -89,12 +102,13 @@ class Diagram {
       [
         "all",
         "All NPIs",
-        new Date(this.data.dates[0]),
-        new Date(this.data.dates[this.data.dates.length - 1]),
+        new Date(this.dataNpi.dates[0]),
+        new Date(this.dataNpi.dates[this.dataNpi.dates.length - 1]),
       ],
     ]);
 
-    chart.draw(dataTable);
+    googleChart.draw(dataTable);
+    GOOGLE_CHARTS.push(this.googleChart) ;
   }
 }
 
@@ -139,21 +153,19 @@ function initGoogleCharts(spreadsheets) {
 }
 
 function renderDiagrams(spreadsheets) {
-  GOOGLE_CHARTS.push(new Diagram("chart_div", spreadsheets.data));
+  let npiData = {
+    dates: fetchDatesFromCsv(spreadsheets.data),
+    npis: spreadsheets.dataNpi,
+  }
+  let diagram1 = new Diagram("chart_1", "chart_1_npi",spreadsheets.data, npiData, {type:"first"});
+  let diagram2 = new Diagram("chart_2", "chart_2_npi",spreadsheets.data, npiData,{type:"second"})
+  let diagram3 = new Diagram("chart_3", "chart_3_npi",spreadsheets.data, npiData,{type:"third"})
 
-  let npiChartData = ["NPI1", "NPI1", "NPI1", "NPI1", "NPI2", "NPI2"];
-  GOOGLE_CHARTS.push(
-    new Diagram(
-      "chart_div2",
-      {
-        dates: fetchDatesFromCsv(spreadsheets.data),
-        npis: spreadsheets.dataNpi,
-      },
-      { type: "timeline" }
-    )
-  );
+
+
+  //GOOGLE_CHARTS.push(new Diagram("chart_div", "chart_div2",spreadsheets.data, npiData));
   GOOGLE_CHARTS.forEach((chart) => {
-    chart.render();
+    //chart.render();
   });
 }
 
