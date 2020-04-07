@@ -16,5 +16,5 @@ Two theses could be applied in an international comparison.
 ## Thesis 1: A pandemic is economically a loose-loose scenario. Nobody wins, a global economy needs a global solution. 
 Many countries regard it as national challenge to avoid and get out of NPI's quickly and to "win" in an international challenge. 
 
-## Thesis 2: A simulation indicates it is more important to align NPIs across borders than trying to get out of NPI restrictions quick. 
+## Thesis 2: A simulation indicates it is more important to align NPI's across borders than trying to get out of NPI restrictions quick. 
 A simulation could show what would have happened if all countries had applied the same NPI's at the same time. Of course this is a thought experiment and does not consider cultural and political issues. Still for decision makers it could show it makes sense to align NPI's with your neighbor countries. 
